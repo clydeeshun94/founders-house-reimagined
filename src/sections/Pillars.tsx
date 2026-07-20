@@ -96,18 +96,19 @@ export function Pillars() {
           trigger: sectionRef.current,
           start: "top top",
           end: () => `+=${(total - 1) * window.innerWidth}`,
-          scrub: true,
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          fastScrollEnd: true,
         },
       });
 
       for (let i = 1; i < total; i++) {
         tl.fromTo(
           cardRefs.current[i],
-          { x: "100vw" },
-          { x: () => finalX(i), ease: "none" },
+          { x: () => window.innerWidth, force3D: true },
+          { x: () => finalX(i), ease: "none", force3D: true, lazy: false },
           (i - 1) * 0.5
         );
       }

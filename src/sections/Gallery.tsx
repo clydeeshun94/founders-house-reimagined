@@ -61,21 +61,21 @@ export function Gallery() {
         );
       });
 
-      /* 3-D tilt per card, softened range + depth + scale for a more
-         considered "settle into place" feel rather than a raw spin */
+      /* Tilt per card — rotationZ + scale only (no rotationX/Y) so Safari
+         can composite on the GPU without triggering a full 3-D layer rebuild
+         on every frame. */
       cardRefs.current.forEach((card) => {
         if (!card) return;
-        const rx = gsap.utils.random(45, 80);
-        const ry = gsap.utils.random(-14, 14);
-        const rz = gsap.utils.random(-10, 10);
-        const setZ = gsap.quickSetter(card, "z", "px");
+        const rz = gsap.utils.random(-8, 8);
         const setScale = gsap.quickSetter(card, "scale");
 
         gsap.fromTo(card,
-          { rotationX: rx, rotationY: ry, rotationZ: rz, scale: 0.92 },
+          { rotationZ: rz, scale: 0.92, force3D: true },
           {
-            rotationX: -rx, rotationY: -ry, rotationZ: -rz, scale: 0.92,
+            rotationZ: -rz, scale: 0.92,
             ease: "none",
+            force3D: true,
+            lazy: false,
             scrollTrigger: {
               trigger: card,
               start: "top bottom+=15%",
@@ -83,9 +83,8 @@ export function Gallery() {
               scrub: 0.8,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
-                const wave = Math.sin(self.progress * Math.PI); // 0 -> 1 -> 0
-                setZ(wave * -60);
-                setScale(0.92 + wave * 0.08); // peaks at 1.0 mid-viewport
+                const wave = Math.sin(self.progress * Math.PI);
+                setScale(0.92 + wave * 0.08);
               },
             },
           }
@@ -101,11 +100,12 @@ export function Gallery() {
             start: "top bottom",
             end: "bottom top",
             scrub: 0.6,
+            lazy: false,
             onToggle: (self) => {
               gsap.to(wrap, { opacity: self.isActive ? 1 : 0, duration: 0.4, overwrite: true });
             },
           },
-        }).fromTo(marqueeTrack.current, { x: "100vw" }, { x: "-100%", ease: "none" });
+        }).fromTo(marqueeTrack.current, { x: () => window.innerWidth }, { x: "-100%", ease: "none", force3D: true, lazy: false });
       }
 
       /* resize */
@@ -144,7 +144,6 @@ export function Gallery() {
                 backgroundImage: "url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1600&q=80')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundAttachment: "fixed",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
@@ -160,9 +159,9 @@ export function Gallery() {
         {GALLERY_ITEMS.slice(0, 5).map((item, i) => (
           <div key={i}
             ref={(el) => { wrapRefs.current[i] = el; }}
-            style={{ perspective: 900, marginBottom: "2rem", width: CARD_W }}>
+            style={{ marginBottom: "2rem", width: CARD_W }}>
             <div ref={(el) => { cardRefs.current[i] = el; }}
-              style={{ transformStyle: "preserve-3d", willChange: "transform" }}>
+              style={{ willChange: "transform" }}>
               <Card item={item} />
             </div>
           </div>

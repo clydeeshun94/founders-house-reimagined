@@ -13,7 +13,6 @@ const cutoutStyle: React.CSSProperties = {
   backgroundImage: BG_IMAGE,
   backgroundSize: "cover",
   backgroundPosition: "center",
-  backgroundAttachment: "fixed",
   WebkitBackgroundClip: "text",
   backgroundClip: "text",
   WebkitTextFillColor: "transparent",
