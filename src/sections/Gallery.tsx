@@ -75,7 +75,6 @@ export function Gallery() {
             rotationZ: -rz, scale: 0.92,
             ease: "none",
             force3D: true,
-            lazy: false,
             scrollTrigger: {
               trigger: card,
               start: "top bottom+=15%",
@@ -100,12 +99,11 @@ export function Gallery() {
             start: "top bottom",
             end: "bottom top",
             scrub: 0.6,
-            lazy: false,
             onToggle: (self) => {
               gsap.to(wrap, { opacity: self.isActive ? 1 : 0, duration: 0.4, overwrite: true });
             },
           },
-        }).fromTo(marqueeTrack.current, { x: () => window.innerWidth }, { x: "-100%", ease: "none", force3D: true, lazy: false });
+        }).fromTo(marqueeTrack.current, { x: () => window.innerWidth }, { x: "-100%", ease: "none", force3D: true });
       }
 
       /* resize */

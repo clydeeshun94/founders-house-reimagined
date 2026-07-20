@@ -108,7 +108,7 @@ export function Pillars() {
         tl.fromTo(
           cardRefs.current[i],
           { x: () => window.innerWidth, force3D: true },
-          { x: () => finalX(i), ease: "none", force3D: true, lazy: false },
+          { x: () => finalX(i), ease: "none", force3D: true },
           (i - 1) * 0.5
         );
       }

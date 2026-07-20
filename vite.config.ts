@@ -8,4 +8,11 @@ export default defineConfig({
   resolve: {
     alias: { "@": resolve(__dirname, "src") },
   },
+  build: {
+    target: ["es2020", "safari14", "chrome90", "firefox90"],
+    cssTarget: ["safari14", "chrome90", "firefox90"],
+  },
+  css: {
+    transformer: "lightningcss",
+  },
 });
